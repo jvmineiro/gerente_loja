@@ -1,6 +1,6 @@
-# gerenteloja
+# Gerente Loja
 
-A new Flutter application.
+A new Flutter application, that main objetive is manage a e-commerce app .
 
 ## Getting Started
 
