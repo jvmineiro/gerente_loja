@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenteloja/blocs/login_bloc.dart';
 import 'package:gerenteloja/widgets/input_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -7,6 +8,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  final _loginBloc = LoginBloc();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,21 +34,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     icon: Icons.person_outline,
                     hint: "Usuario",
                     obscure: false,
+                    stream: _loginBloc.outEmail,
+                    onChanged: _loginBloc.changeEmail,
                   ),
                   InputField(
                     icon: Icons.lock_outline,
                     hint: "Senha",
                     obscure: true,
+                    stream: _loginBloc.outPassword,
+                    onChanged: _loginBloc.changePassword,
                   ),
                   SizedBox(height: 32,),
-                  SizedBox(
-                    height: 50,
-                    child: RaisedButton(
-                      color: Colors.pinkAccent,
-                      child: Text("Entrar"),
-                      onPressed: (){},
-                      textColor: Colors.white,
-                    ),
+                  StreamBuilder<bool>(
+                    stream: _loginBloc.outSubmitValid,
+                    builder: (context, snapshot) {
+                      return SizedBox(
+                        height: 50,
+                        child: RaisedButton(
+                          color: Colors.pinkAccent,
+                          child: Text("Entrar"),
+                          onPressed: snapshot.hasData ? (){} : null,
+                          textColor: Colors.white,
+                          disabledColor: Colors.pinkAccent.withAlpha(140),
+                        ),
+                      );
+                    }
                   )
                 ],
               ),
