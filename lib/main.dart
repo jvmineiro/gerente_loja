@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenteloja/screens/home_sreen.dart';
 import 'package:gerenteloja/screens/login_screen.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.pinkAccent,
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }
