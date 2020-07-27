@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenteloja/blocs/product_bloc.dart';
+import 'package:gerenteloja/widgets/images_widget.dart';
 
 class ProductScreen extends StatefulWidget {
 
@@ -70,7 +71,12 @@ class _ProductScreenState extends State<ProductScreen> {
                     fontSize: 12
                   ),
                 ),
-                ImagesWidget(),
+                ImagesWidget(
+                  context: context,
+                  initialValue: snapshot.data["images"],
+                  onSaved: (l){},
+                  validator: (l){},
+                ),
                 TextFormField(
                   initialValue: snapshot.data["title"],
                   style: _fieldStyle,
