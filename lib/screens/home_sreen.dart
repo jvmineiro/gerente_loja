@@ -6,6 +6,7 @@ import 'package:gerenteloja/blocs/user_bloc.dart';
 import 'package:gerenteloja/tabs/orders_tab.dart';
 import 'package:gerenteloja/tabs/products_tab.dart';
 import 'package:gerenteloja/tabs/users_tab.dart';
+import 'package:gerenteloja/widgets/edit_category_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -129,6 +130,16 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             )
           ],
+        );
+      case 2:
+        return FloatingActionButton(
+          child: Icon(Icons.add),
+          backgroundColor: Colors.pinkAccent,
+          onPressed: (){
+            showDialog(context: context,
+            builder: (context) => EditCategoryDialog()
+            );
+          },
         );
     }
   }
