@@ -4,12 +4,28 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenteloja/blocs/category_bloc.dart';
 
-class EditCategoryDialog extends StatelessWidget {
+class EditCategoryDialog extends StatefulWidget {
 
+  final DocumentSnapshot category;
+
+  EditCategoryDialog({this.category});
+
+  @override
+  _EditCategoryDialogState createState() => _EditCategoryDialogState(
+    category: category
+  );
+}
+
+class _EditCategoryDialogState extends State<EditCategoryDialog> {
   final CategoryBloc _categoryBloc;
 
-  EditCategoryDialog({DocumentSnapshot category }) :
-      _categoryBloc = CategoryBloc(category);
+  final TextEditingController _controller;
+
+  _EditCategoryDialogState({DocumentSnapshot category }) :
+        _categoryBloc = CategoryBloc(category),
+        _controller = TextEditingController(text: category != null ?
+        category.data["title"]: ""
+        );
 
 
   @override
@@ -22,39 +38,39 @@ class EditCategoryDialog extends StatelessWidget {
             ListTile(
               leading: GestureDetector(
                 child: StreamBuilder(
-                  stream: _categoryBloc.outImage,
-                  // ignore: missing_return
-                  builder: (context, snapshot) {
-                    if(snapshot.data != null)
-                    return CircleAvatar(
-                      child: snapshot.data is File ?
-                      Image.file(snapshot.data, fit: BoxFit.cover,):
-                      Image.network(snapshot.data, fit: BoxFit.cover,),
-                      backgroundColor: Colors.transparent,
-                    );
-                    else return Icon(Icons.image);
-                  }
+                    stream: _categoryBloc.outImage,
+                    // ignore: missing_return
+                    builder: (context, snapshot) {
+                      if(snapshot.data != null)
+                        return CircleAvatar(
+                          child: snapshot.data is File ?
+                          Image.file(snapshot.data, fit: BoxFit.cover,):
+                          Image.network(snapshot.data, fit: BoxFit.cover,),
+                          backgroundColor: Colors.transparent,
+                        );
+                      else return Icon(Icons.image);
+                    }
                 ),
               ),
               title: TextField(
-
+                controller: _controller,
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 StreamBuilder<Object>(
-                  stream: _categoryBloc.outDelete,
-                  builder: (context, snapshot) {
-                    if(!snapshot.hasData) return Container();
-                    return FlatButton(
-                      child: Text("Excluir"),
-                      textColor: Colors.red,
-                      onPressed: snapshot.data ? (){
+                    stream: _categoryBloc.outDelete,
+                    builder: (context, snapshot) {
+                      if(!snapshot.hasData) return Container();
+                      return FlatButton(
+                        child: Text("Excluir"),
+                        textColor: Colors.red,
+                        onPressed: snapshot.data ? (){
 
-                      } : null,
-                    );
-                  }
+                        } : null,
+                      );
+                    }
                 ),
                 FlatButton(
                   child: Text("Salvar"),
