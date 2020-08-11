@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenteloja/blocs/category_bloc.dart';
+import 'package:gerenteloja/widgets/image_source_sheet.dart';
 
 class EditCategoryDialog extends StatefulWidget {
 
@@ -37,6 +38,16 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
           children: <Widget>[
             ListTile(
               leading: GestureDetector(
+                onTap: (){
+                  showModalBottomSheet(context: context,
+                      builder: (context) => ImageSourceSheet(
+                        onImageSelected: (image){
+                          Navigator.of(context).pop();
+                          _categoryBloc.setImage(image);
+                        },
+                      )
+                  );
+                },
                 child: StreamBuilder(
                     stream: _categoryBloc.outImage,
                     // ignore: missing_return
@@ -52,8 +63,17 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                     }
                 ),
               ),
-              title: TextField(
-                controller: _controller,
+              title: StreamBuilder<String>(
+                stream: _categoryBloc.outTitle,
+                builder: (context, snapshot) {
+                  return TextField(
+                    controller: _controller,
+                    onChanged: _categoryBloc.setTitle,
+                    decoration: InputDecoration(
+                      errorText: snapshot.hasError ? snapshot.error : null
+                    ),
+                  );
+                }
               ),
             ),
             Row(
@@ -72,11 +92,14 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                       );
                     }
                 ),
-                FlatButton(
-                  child: Text("Salvar"),
-                  onPressed: (){
-
-                  },
+                StreamBuilder<bool>(
+                  stream: _categoryBloc.submitValid,
+                  builder: (context, snapshot) {
+                    return FlatButton(
+                      child: Text("Salvar"),
+                      onPressed: snapshot.hasData ? (){} : null,
+                    );
+                  }
                 )
               ],
             )
